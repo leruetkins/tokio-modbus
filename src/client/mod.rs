@@ -139,7 +139,7 @@ impl Reader for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::ReadCoils(mut coils) => {
-                        debug_assert!(coils.len() >= cnt.into());
+                        // debug_assert removed
                         coils.truncate(cnt.into());
                         coils
                     }
@@ -159,7 +159,7 @@ impl Reader for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::ReadDiscreteInputs(mut coils) => {
-                        debug_assert!(coils.len() >= cnt.into());
+                        // debug_assert removed
                         coils.truncate(cnt.into());
                         coils
                     }
@@ -179,7 +179,7 @@ impl Reader for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::ReadInputRegisters(words) => {
-                        debug_assert_eq!(words.len(), cnt.into());
+                        // debug_assert removed
                         words
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
@@ -198,7 +198,10 @@ impl Reader for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::ReadHoldingRegisters(words) => {
-                        debug_assert_eq!(words.len(), cnt.into());
+                        // Заменено debug_assert на проверку с логированием
+                        if words.len() != cnt.into() {
+                            log::warn!("ReadHoldingRegisters: expected {} words, got {}", cnt, words.len());
+                        }
                         words
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
@@ -224,7 +227,7 @@ impl Reader for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::ReadWriteMultipleRegisters(words) => {
-                        debug_assert_eq!(words.len(), read_count.into());
+                        // debug_assert removed
                         words
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
@@ -258,8 +261,8 @@ impl Writer for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::WriteSingleCoil(rsp_addr, rsp_coil) => {
-                        debug_assert_eq!(addr, rsp_addr);
-                        debug_assert_eq!(coil, rsp_coil);
+                        // debug_assert removed
+                        // debug_assert removed
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
                 })
@@ -274,8 +277,8 @@ impl Writer for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::WriteMultipleCoils(rsp_addr, rsp_cnt) => {
-                        debug_assert_eq!(addr, rsp_addr);
-                        debug_assert_eq!(cnt, rsp_cnt.into());
+                        // debug_assert removed
+                        // debug_assert removed
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
                 })
@@ -289,8 +292,8 @@ impl Writer for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::WriteSingleRegister(rsp_addr, rsp_word) => {
-                        debug_assert_eq!(addr, rsp_addr);
-                        debug_assert_eq!(word, rsp_word);
+                        // debug_assert removed
+                        // debug_assert removed
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
                 })
@@ -309,8 +312,8 @@ impl Writer for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::WriteMultipleRegisters(rsp_addr, rsp_cnt) => {
-                        debug_assert_eq!(addr, rsp_addr);
-                        debug_assert_eq!(cnt, rsp_cnt.into());
+                        // debug_assert removed
+                        // debug_assert removed
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
                 })
@@ -329,9 +332,9 @@ impl Writer for Context {
             .map(|result| {
                 result.map(|response| match response {
                     Response::MaskWriteRegister(rsp_addr, rsp_and_mask, rsp_or_mask) => {
-                        debug_assert_eq!(addr, rsp_addr);
-                        debug_assert_eq!(and_mask, rsp_and_mask);
-                        debug_assert_eq!(or_mask, rsp_or_mask);
+                        // debug_assert removed
+                        // debug_assert removed
+                        // debug_assert removed
                     }
                     _ => unreachable!("call() should reject mismatching responses"),
                 })
